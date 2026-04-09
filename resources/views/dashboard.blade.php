@@ -676,6 +676,169 @@
             font-size: 0.73rem;
             font-weight: 700;
         }
+
+        /* ── IDENTITAS FORM ── */
+        .identitas-wrap {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .identitas-form-panel {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .identitas-preview-panel {
+            width: 300px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .identitas-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+        }
+
+        .identitas-card-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .identitas-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 20px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .field-full {
+            grid-column: 1 / -1;
+        }
+
+        .field-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 0.1px;
+        }
+
+        .field-input {
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: 0.85rem;
+            font-family: var(--font);
+            color: var(--text);
+            background: #fafbff;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            width: 100%;
+        }
+
+        .field-input:focus {
+            border-color: var(--blue);
+            background: #fff;
+            box-shadow: 0 0 0 3px #2563eb18;
+        }
+
+        .btn-simpan {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--blue);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 22px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: filter 0.15s, transform 0.1s;
+        }
+
+        .btn-simpan:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-simpan:active {
+            transform: translateY(0);
+        }
+
+        /* Preview panel */
+        .preview-block {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .preview-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text);
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--border);
+            background: #fafbff;
+        }
+
+        .preview-img-wrap {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            min-height: 100px;
+        }
+
+        .preview-img-wrap img {
+            max-width: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .preview-photo {
+            padding: 0;
+        }
+
+        .preview-photo img {
+            border-radius: 0;
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        @media (max-width: 900px) {
+            .identitas-wrap {
+                flex-direction: column;
+            }
+
+            .identitas-preview-panel {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .preview-block {
+                flex: 1;
+                min-width: 200px;
+            }
+        }
     </style>
 </head>
 
@@ -1095,10 +1258,101 @@
                 </div>
 
                 <!-- GENERIC PAGES -->
+                <!-- IDENTITAS SEKOLAH PAGE -->
                 <div class="page" id="page-identitas">
-                    <div class="data-table-wrap">
-                        <div class="data-table-head"><span>Identitas Sekolah</span></div>
-                        <div style="padding:24px;color:var(--muted);font-size:0.87rem;">Halaman identitas sekolah.</div>
+                    <div class="identitas-wrap">
+                        <!-- Form Panel -->
+                        <div class="identitas-form-panel">
+                            <div class="identitas-card">
+                                <div class="identitas-card-title">Identitas Sekolah</div>
+                                <div class="identitas-grid">
+                                    <div class="field-group">
+                                        <label class="field-label">Nama Sekolah</label>
+                                        <input type="text" class="field-input" id="namaSekolah" value="SMK NEGERI JAMBU" />
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">NPSN</label>
+                                        <input type="text" class="field-input" id="npsn" value="20339165" />
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">Kabupaten/Kota</label>
+                                        <input type="text" class="field-input" id="kabkota" value="Kab. Semarang" />
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">Provinsi</label>
+                                        <input type="text" class="field-input" id="provinsi" value="Jawa Tengah" />
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">Tahun Ajaran</label>
+                                        <input type="text" class="field-input" id="tahunAjaran" value="2025/2026" />
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">Nama Bengkel/Lab</label>
+                                        <input type="text" class="field-input" id="namaBengkel" value="Bengkel Teknik Pemesinan" />
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">Nama Kepala Sekolah</label>
+                                        <input type="text" class="field-input" id="namaKepsek" value="Bambang" />
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">NIP Kepala Sekolah</label>
+                                        <input type="text" class="field-input" id="nipKepsek" value="1234567890" />
+                                    </div>
+                                    <div class="field-group field-full">
+                                        <label class="field-label">Link Foto Kepala Sekolah</label>
+                                        <input type="url" class="field-input" id="fotoKepsek" value="https://example.com/foto-kepsek.jpg" oninput="updatePreview('fotoKepsek','prev-kepsek')" />
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">Nama Kepala Bengkel/Lab</label>
+                                        <input type="text" class="field-input" id="namaKabeng" value="Izza" />
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">NIP Kepala Bengkel/Lab</label>
+                                        <input type="text" class="field-input" id="nipKabeng" value="1234567891" />
+                                    </div>
+                                    <div class="field-group field-full">
+                                        <label class="field-label">Link Foto Kepala Bengkel/Lab</label>
+                                        <input type="url" class="field-input" id="fotoKabeng" value="https://example.com/foto-kabeng.jpg" oninput="updatePreview('fotoKabeng','prev-kabeng')" />
+                                    </div>
+                                    <div class="field-group field-full">
+                                        <label class="field-label">Link Logo Sekolah</label>
+                                        <input type="url" class="field-input" id="logoSekolah" value="https://example.com/logo.png" oninput="updatePreview('logoSekolah','prev-logo')" />
+                                    </div>
+                                </div>
+                                <div style="margin-top:20px;">
+                                    <button class="btn-simpan" onclick="simpanIdentitas()">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                                            <polyline points="17 21 17 13 7 13 7 21" />
+                                            <polyline points="7 3 7 8 15 8" />
+                                        </svg>
+                                        Simpan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview Panel -->
+                        <div class="identitas-preview-panel">
+                            <div class="preview-block">
+                                <div class="preview-label">Preview Logo Sekolah</div>
+                                <div class="preview-img-wrap">
+                                    <img id="prev-logo" src="https://via.placeholder.com/120x120?text=Logo" alt="Logo Sekolah" onerror="this.src='https://via.placeholder.com/120x120?text=Logo'" />
+                                </div>
+                            </div>
+                            <div class="preview-block">
+                                <div class="preview-label">Preview Foto Kepala Sekolah</div>
+                                <div class="preview-img-wrap preview-photo">
+                                    <img id="prev-kepsek" src="https://via.placeholder.com/300x160?text=Foto+Kepala+Sekolah" alt="Foto Kepala Sekolah" onerror="this.src='https://via.placeholder.com/300x160?text=Foto'" />
+                                </div>
+                            </div>
+                            <div class="preview-block">
+                                <div class="preview-label">Preview Foto Kepala Bengkel</div>
+                                <div class="preview-img-wrap preview-photo">
+                                    <img id="prev-kabeng" src="https://via.placeholder.com/300x160?text=Foto+Kepala+Bengkel" alt="Foto Kepala Bengkel" onerror="this.src='https://via.placeholder.com/300x160?text=Foto'" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="page" id="page-staf">
@@ -1319,6 +1573,26 @@
         const now = new Date();
         document.getElementById('topbarDate').textContent =
             `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+        // Identitas helpers
+        function updatePreview(inputId, imgId) {
+            const url = document.getElementById(inputId).value.trim();
+            const img = document.getElementById(imgId);
+            if (url) {
+                img.src = url;
+            }
+        }
+
+        function simpanIdentitas() {
+            const btn = document.querySelector('.btn-simpan');
+            const orig = btn.innerHTML;
+            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Tersimpan!`;
+            btn.style.background = '#10b981';
+            setTimeout(() => {
+                btn.innerHTML = orig;
+                btn.style.background = '';
+            }, 2000);
+        }
 
         // Page navigation
         const pageTitles = {
