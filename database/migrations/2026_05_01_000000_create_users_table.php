@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('username')->unique();
             $table->string('identity_number');
-            $table->string('wa');
+            $table->string('wa')->nullable();
             $table->string('foto')->nullable();
             $table->enum('role', ['admin', 'walikelas', 'staf', 'user']);
             $table->string('password');

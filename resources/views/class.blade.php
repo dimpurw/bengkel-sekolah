@@ -1,61 +1,49 @@
 @extends('layouts.main')
 
-@section('title', 'Master Staf Bengkel')
+@section('title', 'Master Kelas')
 
 @section('content')
 
-{{-- ── TABEL STAF ── --}}
+{{-- ── TABEL Walikelas ── --}}
 <div class="data-table-wrap">
     <div class="data-table-head">
-        <span>Daftar Staf Bengkel</span>
+        <span>Daftar Kelas</span>
         <button class="btn-add" onclick="openModal('modalTambah')">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
-            Tambah Staf
+            Tambah Walikelas
         </button>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th>Nama</th>
+                <th>Kelas</th>
+                <th>Walikelas</th>
                 <th>NIP</th>
-                <th>No. WA</th>
                 <th>Username</th>
-                <th>Foto</th>
                 <th style="text-align:center;">Aksi</th>
             </tr>
         </thead>
         <tbody>
-            @forelse($users as $i => $staf)
+            @forelse($users as $i => $walikelas)
             <tr>
-                <td style="font-weight:600;">{{ $staf->name }}</td>
-                <td>{{ $staf->identity_number ?? '-' }}</td>
-                <td>{{ $staf->wa }}</td>
-                <td>{{ $staf->username ?? '-' }}</td>
-                <td>
-                    @if($staf->foto)
-                    <img src="{{ asset($staf->foto) }}"
-                        class="table-foto">
-                    @else
-                    <div class="table-avatar">
-                        {{ strtoupper(substr($staf->name, 0, 1)) }}
-                    </div>
-                    @endif
-                </td>
+                <td style="font-weight:600;">{{ $walikelas->classRoom->nama }}</td>
+                <td>{{ $walikelas->name ?? '-' }}</td>
+                <td>{{ $walikelas->identity_number }}</td>
+                <td>{{ $walikelas->username ?? '-' }}</td>
                 <td style="text-align:center;">
                     <div style="display:flex;gap:6px;justify-content:center;">
                         {{-- Tombol Edit --}}
                         <button class="btn-action btn-edit"
                             onclick="openEdit(
-                  {{ $staf->id }},
-                  '{{ addslashes($staf->name) }}',
-                  '{{ addslashes($staf->username ?? '') }}',
-                  '{{ addslashes($staf->identity_number) }}',
-                  '{{ addslashes($staf->wa ?? '') }}',
-                  '{{ addslashes($staf->foto ?? '') }}'
+                  {{ $walikelas->id }},
+                  '{{ addslashes($walikelas->classRoom->nama) }}',
+                  '{{ addslashes($walikelas->name ?? '') }}',
+                  '{{ addslashes($walikelas->identity_number) }}',
+                  '{{ addslashes($walikelas->username ?? '') }}'
                 )">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -65,7 +53,7 @@
                         </button>
                         {{-- Tombol Hapus --}}
                         <button class="btn-action btn-hapus"
-                            onclick="openHapus({{ $staf->id }}, '{{ addslashes($staf->nama) }}')">
+                            onclick="openHapus({{ $walikelas->id }}, '{{ addslashes($walikelas->nama) }}')">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                                 <polyline points="3 6 5 6 21 6" />
                                 <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
@@ -80,7 +68,7 @@
             @empty
             <tr>
                 <td colspan="7" style="text-align:center;color:#94a3b8;padding:32px;font-size:0.87rem;">
-                    Belum ada data staf bengkel.
+                    Belum ada data Walikelas.
                 </td>
             </tr>
             @endforelse
@@ -99,20 +87,20 @@
             <button class="modal-close" onclick="closeModal('modalTambah')">✕</button>
         </div>
 
-        <form method="POST" action="{{ route('staf.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('class.store') }}" enctype="multipart/form-data">
             @csrf
 
             <div class="modal-body">
                 <div class="modal-grid">
 
                     <div class="field-group field-full">
-                        <label class="field-label">Nama Lengkap *</label>
-                        <input type="text" name="name" class="field-input" required>
+                        <label class="field-label">Nama Kelas *</label>
+                        <input type="text" name="class_room" class="field-input" required>
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label">Username *</label>
-                        <input type="text" name="username" class="field-input" required>
+                        <label class="field-label">Nama Walikelas *</label>
+                        <input type="text" name="name" class="field-input" required>
                     </div>
 
                     <div class="field-group">
@@ -121,13 +109,8 @@
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label">No. WhatsApp *</label>
-                        <input type="number" name="wa" class="field-input" required>
-                    </div>
-
-                    <div class="field-group">
-                        <label class="field-label">Foto</label>
-                        <input type="file" name="foto" class="field-input">
+                        <label class="field-label">Username *</label>
+                        <input type="text" name="username" class="field-input" required>
                     </div>
 
                     <div class="field-group">
@@ -164,13 +147,13 @@
                 <div class="modal-grid">
 
                     <div class="field-group field-full">
-                        <label class="field-label">Nama Lengkap *</label>
-                        <input type="text" name="name" id="edit_name" class="field-input" required>
+                        <label class="field-label">Nama Kelas *</label>
+                        <input type="text" name="class_room" id="edit_class_room" class="field-input" required>
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label">Username *</label>
-                        <input type="text" name="username" id="edit_username" class="field-input" required>
+                        <label class="field-label">Nama Walikelas *</label>
+                        <input type="text" name="name" id="edit_name" class="field-input" required>
                     </div>
 
                     <div class="field-group">
@@ -179,19 +162,8 @@
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label">No. WhatsApp *</label>
-                        <input type="number" name="wa" id="edit_wa" class="field-input" required>
-                    </div>
-
-                    <div class="field-group">
-                        <label class="field-label">Foto</label>
-                        <!-- PREVIEW FOTO LAMA -->
-                        <div style="margin-bottom:10px;">
-                            <img id="preview_foto" src=""
-                                style="width:70px;height:70px;object-fit:cover;border-radius:8px;display:none;">
-                        </div>
-                        <!-- INPUT FOTO BARU -->
-                        <input type="file" name="foto" class="field-input" onchange="previewFoto(event)">
+                        <label class="field-label">Username *</label>
+                        <input type="text" name="username" id="edit_username" class="field-input" required>
                     </div>
 
                     <div class="field-group">
@@ -216,7 +188,7 @@
 <div class="modal-overlay" id="modalHapus">
     <div class="modal-box modal-box-sm">
         <div class="modal-head modal-head-danger">
-            <span>Hapus Staf</span>
+            <span>Hapus Kelas</span>
             <button class="modal-close" onclick="closeModal('modalHapus')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="18" y1="6" x2="6" y2="18" />
@@ -234,7 +206,7 @@
                 </svg>
             </div>
             <p style="font-size:0.95rem;font-weight:700;color:#0f172a;margin-bottom:6px;">Yakin ingin menghapus?</p>
-            <p style="font-size:0.85rem;color:#64748b;">Data staf <strong id="hapusNama"></strong> akan dihapus permanen dan tidak bisa dikembalikan.</p>
+            <p style="font-size:0.85rem;color:#64748b;">Data Walikelas <strong id="hapusNama"></strong> akan dihapus permanen dan tidak bisa dikembalikan.</p>
         </div>
         <form method="POST" id="formHapus" action="">
             @csrf
@@ -472,23 +444,13 @@
     });
 
     // ── Buka modal Edit & isi data ──
-    function openEdit(id, name, username, identity_number, wa, foto) {
+    function openEdit(id, class_room, name, identity_number, username) {
+        document.getElementById('edit_class_room').value = class_room;
         document.getElementById('edit_name').value = name;
-        document.getElementById('edit_username').value = username;
         document.getElementById('edit_identity_number').value = identity_number;
-        document.getElementById('edit_wa').value = wa;
+        document.getElementById('edit_username').value = username;
 
-        document.getElementById('formEdit').action = `/master-staf-bengkel/${id}`;
-
-        // tampilkan foto lama
-        let preview = document.getElementById('preview_foto');
-
-        if (foto) {
-            preview.src = `/${foto}`;
-            preview.style.display = 'block';
-        } else {
-            preview.style.display = 'none';
-        }
+        document.getElementById('formEdit').action = `/master-kelas/${id}`;
 
         openModal('modalEdit');
     }
@@ -496,7 +458,7 @@
     // ── Buka modal Hapus & set action ──
     function openHapus(id, nama) {
         document.getElementById('hapusNama').textContent = nama;
-        document.getElementById('formHapus').action = `/master-staf-bengkel/${id}`;
+        document.getElementById('formHapus').action = `/master-kelas/${id}`;
         openModal('modalHapus');
     }
 </script>
