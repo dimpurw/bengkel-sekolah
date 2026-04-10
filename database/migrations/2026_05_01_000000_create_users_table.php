@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('class_room_id')->constrained('class_rooms')->onDelete('cascade')->nullable();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('username')->unique();
+            $table->string('identity_number');
+            $table->string('wa');
+            $table->string('foto')->nullable();
+            $table->enum('role', ['admin', 'walikelas', 'staf', 'user']);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

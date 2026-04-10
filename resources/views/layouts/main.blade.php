@@ -466,6 +466,27 @@
         }
 
         /* ── DATA TABLE ── */
+        .table-foto {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 1.5px solid #e5e7eb;
+        }
+
+        .table-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #006FBB;
+            color: #fff;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
         .data-table-wrap {
             background: var(--white);
             border-radius: 14px;
@@ -574,6 +595,25 @@
             background: #d1fae5;
             border: 1px solid #6ee7b7;
             color: #065f46;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 0.87rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px #00000018;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert-danger-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: #fad9d1;
+            border: 1px solid #e7866e;
+            color: #5f1306;
             border-radius: 10px;
             padding: 12px 20px;
             font-size: 0.87rem;
@@ -830,6 +870,28 @@
                         <polyline points="20 6 9 17 4 12" />
                     </svg>
                     {{ session('success') }}
+                </div>
+                @endif
+                @if(session('error'))
+                <div class="alert-danger-toast" id="flashToast">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    {{ session('error') }}
+                </div>
+                @endif
+                @if ($errors->any())
+                <div class="alert-danger-toast" id="flashToast">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+
+                    <div>
+                        @foreach ($errors->all() as $error)
+                        <div>{{ $error }}</div>
+                        @endforeach
+                    </div>
                 </div>
                 @endif
 
