@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClassRoomController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StafController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,3 +28,10 @@ Route::post('master-kelas', [ClassRoomController::class, 'store'])->name('class.
 Route::put('master-kelas/{id}', [ClassRoomController::class, 'update'])->name('class.update');
 Route::delete('master-kelas/{id}', [ClassRoomController::class, 'destroy'])->name('class.destroy');
 Route::post('master-kelas/import-class', [ClassRoomController::class, 'import'])->name('class.import');
+
+Route::get('master-siswa', [UserController::class, 'index'])->name('user.index');
+Route::post('master-siswa', [UserController::class, 'store'])->name('user.store');
+Route::get('master-siswa/{id}/detail', [UserController::class, 'detail'])->name('user.detail');
+Route::put('master-siswa/{id}', [UserController::class, 'update'])->name('user.update');
+Route::delete('master-siswa/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+Route::post('master-siswa/import-class', [UserController::class, 'import'])->name('user.import');
