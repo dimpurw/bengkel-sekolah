@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClassRoomController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StafController;
 use App\Http\Controllers\UserController;
@@ -35,3 +36,9 @@ Route::get('master-siswa/{id}/detail', [UserController::class, 'detail'])->name(
 Route::put('master-siswa/{id}', [UserController::class, 'update'])->name('user.update');
 Route::delete('master-siswa/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 Route::post('master-siswa/import-class', [UserController::class, 'import'])->name('user.import');
+
+Route::get('lokasi-penyimpanan', [LocationController::class, 'index'])->name('location.index');
+Route::post('lokasi-penyimpanan', [LocationController::class, 'store'])->name('location.store');
+Route::put('lokasi-penyimpanan/{id}', [LocationController::class, 'update'])->name('location.update');
+Route::delete('lokasi-penyimpanan/{id}', [LocationController::class, 'destroy'])->name('location.destroy');
+Route::post('lokasi-penyimpanan/import-class', [LocationController::class, 'import'])->name('location.import');
