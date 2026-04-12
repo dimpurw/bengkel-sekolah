@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DamagedItem;
 use App\Models\Location;
+use App\Models\StockOut;
 use Illuminate\Http\Request;
 
-class DamagedItemController extends Controller
+class StockOutController extends Controller
 {
     public function index(Request $request)
     {
-        $items = DamagedItem::orderBy('created_at', 'desc')
+        $items = StockOut::orderBy('created_at', 'desc')
             ->get();
         $locations = Location::orderBy('created_at', 'desc')
             ->get();
 
-        return view('item.damaged', compact('items', 'locations'));
+        return view('item.stock_out', compact('items', 'locations'));
     }
 
     public function store(Request $request)
@@ -24,6 +24,7 @@ class DamagedItemController extends Controller
             'no_registrasi' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'stok' => 'required|numeric',
+            'batas_aman_stok' => 'required|numeric',
             'satuan' => 'required|string|max:50',
             'merek' => 'nullable|string|max:255',
             'vendor' => 'nullable|string|max:255',
@@ -35,14 +36,15 @@ class DamagedItemController extends Controller
 
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
-            $gambarPath = 'barang_rusak_folder/gambar_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move('barang_rusak_folder', $gambarPath);
+            $gambarPath = 'barang_habis_pakai_folder/gambar_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move('barang_habis_pakai_folder', $gambarPath);
         }
 
-        DamagedItem::create([
+        StockOut::create([
             'no_registrasi' => $request->no_registrasi,
             'name' => $request->name,
             'stok' => $request->stok,
+            'batas_aman_stok' => $request->batas_aman_stok,
             'satuan' => $request->satuan,
             'merek' => $request->merek,
             'vendor' => $request->vendor,
@@ -50,18 +52,19 @@ class DamagedItemController extends Controller
             'location_id' => $request->location_id,
         ]);
 
-        return redirect()->route('damaged.item.index')
-            ->with('success', 'Data Barang Rusak/Arsip berhasil dibuat');
+        return redirect()->route('good.item.index')
+            ->with('success', 'Data Barang (Kondisi Baik) berhasil dibuat');
     }
 
     public function update(Request $request, $id)
     {
-        $damagedItem = DamagedItem::findOrFail($id);
+        $goodItem = StockOut::findOrFail($id);
 
         $request->validate([
             'no_registrasi' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'stok' => 'required|numeric',
+            'batas_aman_stok' => 'required|numeric',
             'satuan' => 'required|string|max:50',
             'merek' => 'nullable|string|max:255',
             'vendor' => 'nullable|string|max:255',
@@ -70,22 +73,23 @@ class DamagedItemController extends Controller
         ]);
 
         // ── Upload gambar hero
-        $gambarPath = $damagedItem->gambar ?? null;
+        $gambarPath = $goodItem->gambar ?? null;
 
         if ($request->hasFile('gambar')) {
-            if ($damagedItem && $damagedItem->gambar) {
-                unlink($damagedItem->gambar);
+            if ($goodItem && $goodItem->gambar) {
+                unlink($goodItem->gambar);
             }
 
             $file = $request->file('gambar');
-            $gambarPath = 'barang_rusak_folder/gambar_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move('barang_rusak_folder', $gambarPath);
+            $gambarPath = 'barang_habis_pakai_folder/gambar_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move('barang_habis_pakai_folder', $gambarPath);
         }
 
         $data = [
             'no_registrasi' => $request->no_registrasi,
             'name' => $request->name,
             'stok' => $request->stok,
+            'batas_aman_stok' => $request->batas_aman_stok,
             'satuan' => $request->satuan,
             'merek' => $request->merek,
             'vendor' => $request->vendor,
@@ -93,23 +97,23 @@ class DamagedItemController extends Controller
             'location_id' => $request->location_id,
         ];
 
-        $damagedItem->update($data);
+        $goodItem->update($data);
 
-        return redirect()->route('damaged.item.index')
-            ->with('success', 'Data Barang Rusak/Arsip berhasil diupdate');
+        return redirect()->route('good.item.index')
+            ->with('success', 'Data Barang (Kondisi Baik) berhasil diupdate');
     }
 
     public function destroy($id)
     {
-        $damagedItem = DamagedItem::findOrFail($id);
+        $goodItem = StockOut::findOrFail($id);
 
-        if ($damagedItem && $damagedItem->gambar) {
-            unlink($damagedItem->gambar);
+        if ($goodItem && $goodItem->gambar) {
+            unlink($goodItem->gambar);
         }
 
-        $damagedItem->delete();
+        $goodItem->delete();
 
-        return redirect()->route('damaged.item.index')
-            ->with('success', 'Data Barang Rusak/Arsip berhasil dihapus');
+        return redirect()->route('good.item.index')
+            ->with('success', 'Data Barang (Kondisi Baik) berhasil dihapus');
     }
 }

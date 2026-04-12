@@ -17,4 +17,9 @@ class Location extends Model
     {
         return $this->hasMany(DamagedItem::class);
     }
+
+    public function stockOut()
+    {
+        return $this->hasMany(StockOut::class);
+    }
 }

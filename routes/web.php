@@ -6,6 +6,7 @@ use App\Http\Controllers\GoodItemController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StafController;
+use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,3 +57,9 @@ Route::post('barang-kondisi-rusak', [DamagedItemController::class, 'store'])->na
 Route::put('barang-kondisi-rusak/{id}', [DamagedItemController::class, 'update'])->name('damaged.item.update');
 Route::delete('barang-kondisi-rusak/{id}', [DamagedItemController::class, 'destroy'])->name('damaged.item.destroy');
 Route::post('barang-kondisi-rusak/import-class', [DamagedItemController::class, 'import'])->name('damaged.item.import');
+
+Route::get('bahan-habis-pakai', [StockOutController::class, 'index'])->name('stock.out.index');
+Route::post('bahan-habis-pakai', [StockOutController::class, 'store'])->name('stock.out.store');
+Route::put('bahan-habis-pakai/{id}', [StockOutController::class, 'update'])->name('stock.out.update');
+Route::delete('bahan-habis-pakai/{id}', [StockOutController::class, 'destroy'])->name('stock.out.destroy');
+Route::post('bahan-habis-pakai/import-class', [StockOutController::class, 'import'])->name('stock.out.import');
