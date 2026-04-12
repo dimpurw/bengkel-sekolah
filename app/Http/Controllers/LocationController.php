@@ -21,8 +21,7 @@ class LocationController extends Controller
         ]);
 
         Location::create([
-            'name' => $request->name,
-            'kode' => 'LOK-' . strtoupper(substr(uniqid(), -6)),
+            'name' => $request->name
         ]);
 
         return redirect()->route('location.index')

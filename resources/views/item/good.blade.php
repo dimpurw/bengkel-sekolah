@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Master Siswa')
+@section('title', 'Barang (Kondisi Baik)')
 
 @section('content')
 
@@ -13,7 +13,7 @@
         {{-- Baris atas: judul + tombol aksi --}}
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
             <span style="font-size:0.92rem;font-weight:800;color:#0f172a;">
-                Data Siswa
+                Data Barang/Peralatan (Kondisi Baik)
             </span>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
                 <a href="#" target="_blank" class="btn-top btn-cetak">
@@ -43,7 +43,7 @@
         </div>
 
         {{-- Baris filter --}}
-        <form method="GET" action="{{ route('user.index') }}" id="filterForm">
+        <form method="GET" action="{{ route('good.item.index') }}" id="filterForm">
             <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
 
                 {{-- Search --}}
@@ -65,9 +65,9 @@
                 <div style="min-width:160px;">
                     <select name="kelas_id" class="field-input" onchange="this.form.submit()">
                         <option value="">Semua Kelas</option>
-                        @foreach($classRooms as $kelas)
-                        <option value="{{ $kelas->id }}" {{ request('kelas_id') == $kelas->id ? 'selected' : '' }}>
-                            {{ $kelas->nama }}
+                        @foreach($locations as $location)
+                        <option value="{{ $location->id }}" {{ request('kelas_id') == $location->id ? 'selected' : '' }}>
+                            {{ $location->name }}
                         </option>
                         @endforeach
                     </select>
@@ -86,7 +86,7 @@
 
                 {{-- Reset --}}
                 @if(request()->hasAny(['search','kelas_id']) && request()->anyFilled(['search','kelas_id']))
-                <a href="{{ route('user.index') }}" class="btn-reset">
+                <a href="{{ route('good.item.index') }}" class="btn-reset">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <line x1="18" y1="6" x2="6" y2="18" />
                         <line x1="6" y1="6" x2="18" y2="18" />
@@ -100,22 +100,22 @@
 
     {{-- ── CARD GRID ── --}}
     <div style="padding:20px;">
-        @if($users->isEmpty())
+        @if($items->isEmpty())
         <div style="text-align:center;padding:48px;color:#94a3b8;">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
                 style="margin:0 auto 12px;display:block;opacity:.4;">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
             </svg>
-            <p style="font-size:0.88rem;font-weight:600;">Tidak ada data siswa ditemukan.</p>
+            <p style="font-size:0.88rem;font-weight:600;">Tidak ada data barang (Kondisi Baik) ditemukan.</p>
         </div>
         @else
         <div class="siswa-grid">
-            @foreach($users as $s)
+            @foreach($items as $item)
             <div class="siswa-card">
                 <div class="siswa-foto">
-                    @if($s->foto)
-                    <img src="{{ asset($s->foto) }}" alt="{{ $s->nama }}" />
+                    @if($item->gambar)
+                    <img src="{{ asset($item->gambar) }}" alt="{{ $item->name }}" />
                     @else
                     <div class="siswa-foto-placeholder">
                         <svg viewBox="0 0 24 24" fill="none" stroke="#ffffffaa" stroke-width="1.2">
@@ -126,13 +126,17 @@
                     @endif
                 </div>
                 <div class="siswa-info">
-                    <div class="siswa-nama">{{ $s->name }}</div>
-                    <div class="siswa-meta">NIS: {{ $s->identity_number }}</div>
-                    <div class="siswa-meta">Kelas: {{ $s->classRoom->nama ?? '-' }}</div>
-                    <div class="siswa-meta">Username: {{ $s->username ?? '-' }}</div>
+                    <div class="siswa-nama">{{ $item->name }}</div>
+                    <div class="siswa-no">No: {{ $item->no_registrasi ?? '-' }}</div>
+                    <div class="siswa-stok">
+                        <span class="badge bg-success">
+                            Stok: {{ $item->stok ?? '-' }}
+                        </span>
+                    </div>
+                    <div class="siswa-merek">Merek: {{ $item->merek ?? '-' }}</div>
                 </div>
                 <div class="siswa-aksi">
-                    <button class="btn-detail" onclick="openDetail({{ $s->id }})">
+                    <button class="btn-detail" onclick="openDetail({{ $item->id }})">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                             <circle cx="12" cy="12" r="3" />
@@ -148,12 +152,16 @@
                     </a>
                     <button class="btn-icon-blue" title="Edit"
                         onclick="openEdit(
-                            {{ $s->id }},
-                            '{{ addslashes($s->name) }}',
-                            '{{ addslashes($s->username) }}',
-                            '{{ $s->identity_number }}',
-                            '{{ $s->class_room_id }}',
-                            '{{ $s->foto }}'
+                            {{ $item->id }},
+                            '{{ $item->no_registrasi }}',
+                            '{{ $item->name }}',
+                            '{{ $item->stok }}',
+                            '{{ $item->batas_aman_stok }}',
+                            '{{ $item->satuan }}',
+                            '{{ $item->merek }}',
+                            '{{ $item->vendor }}',
+                            '{{ $item->gambar }}',
+                            '{{ $item->location_id }}',
                         )">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                             <path d="M12 20h9" />
@@ -161,7 +169,7 @@
                         </svg>
                     </button>
                     <button class="btn-icon-red" title="Hapus"
-                        onclick="openHapus({{ $s->id }}, '{{ addslashes($s->nama) }}')">
+                        onclick="openHapus({{ $item->id }}, '{{ addslashes($item->nama) }}')">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                             <polyline points="3 6 5 6 21 6" />
                             <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
@@ -182,7 +190,7 @@
 <div class="modal-overlay" id="modalTambah">
     <div class="modal-box">
         <div class="modal-head">
-            <span>Tambah Siswa</span>
+            <span>Tambah Barang (Kondisi Baik)</span>
             <button class="modal-close" onclick="closeModal('modalTambah')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="18" y1="6" x2="6" y2="18" />
@@ -190,49 +198,68 @@
                 </svg>
             </button>
         </div>
-        <form method="POST" action="{{ route('user.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('good.item.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
                 <div class="modal-grid">
                     <div class="field-group field-full">
-                        <label class="field-label">Nama Lengkap <span class="req">*</span></label>
+                        <label class="field-label">No Registrasi <span class="req">*</span></label>
+                        <input type="text" class="field-input" name="no_registrasi"
+                            value="{{ old('no_registrasi') }}" placeholder="No Registrasi" required />
+                        @error('no_registrasi')<span class="err-msg">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Nama Barang/Peralatan <span class="req">*</span></label>
                         <input type="text" class="field-input" name="name"
-                            value="{{ old('name') }}" placeholder="Nama siswa" required />
+                            value="{{ old('name') }}" placeholder="Nama Barang/Peralatan" required />
                         @error('name')<span class="err-msg">{{ $message }}</span>@enderror
                     </div>
                     <div class="field-group">
-                        <label class="field-label">NIS <span class="req">*</span></label>
-                        <input type="number" class="field-input" name="identity_number"
-                            value="{{ old('nis') }}" placeholder="Nomor Induk Siswa" required />
-                        @error('nis')<span class="err-msg">{{ $message }}</span>@enderror
+                        <label class="field-label">Jumlah Stok <span class="req">*</span></label>
+                        <input type="number" class="field-input" name="stok"
+                            value="{{ old('stok') }}" placeholder="Jumlah Stok" required />
+                        @error('stok')<span class="err-msg">{{ $message }}</span>@enderror
                     </div>
                     <div class="field-group">
-                        <label class="field-label">Kelas <span class="req">*</span></label>
-                        <select class="field-input" name="class_room_id" required>
-                            <option value="">-- Pilih Kelas --</option>
-                            @foreach($classRooms as $kelas)
-                            <option value="{{ $kelas->id }}" {{ old('kelas_id') == $kelas->id ? 'selected' : '' }}>
-                                {{ $kelas->nama }}
+                        <label class="field-label">Batas Stok Aman <span class="req">*</span></label>
+                        <input type="number" class="field-input" name="batas_aman_stok"
+                            value="{{ old('batas_aman_stok') }}" placeholder="Batas Stok Aman" required />
+                        @error('batas_aman_stok')<span class="err-msg">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Satuan <span class="req">*</span></label>
+                        <input type="text" class="field-input" name="satuan"
+                            value="{{ old('satuan') }}" placeholder="Satuan" required />
+                        @error('satuan')<span class="err-msg">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Merek <span class="req">*</span></label>
+                        <input type="text" class="field-input" name="merek"
+                            value="{{ old('merek') }}" placeholder="Merek" required />
+                        @error('merek')<span class="err-msg">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Vendor/Distributor <span class="req">*</span></label>
+                        <input type="text" class="field-input" name="vendor"
+                            value="{{ old('vendor') }}" placeholder="Vendor/Distributor" required />
+                        @error('vendor')<span class="err-msg">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Lokasi <span class="req">*</span></label>
+                        <select class="field-input" name="location_id" required>
+                            <option value="">-- Pilih Lokasi --</option>
+                            @foreach($locations as $location)
+                            <option value="{{ $location->id }}" {{ old('location_id') == $location->id ? 'selected' : '' }}>
+                                {{ $location->name }}
                             </option>
                             @endforeach
                         </select>
-                        @error('kelas_id')<span class="err-msg">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="field-group">
-                        <label class="field-label">Username <span class="req">*</span></label>
-                        <input type="text" class="field-input" name="username"
-                            value="{{ old('username') }}" placeholder="Username login" required />
-                        @error('username')<span class="err-msg">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="field-group">
-                        <label class="field-label">Password</label>
-                        <input type="password" class="field-input" name="password" required />
-                        @error('password')<span class="err-msg">{{ $message }}</span>@enderror
+                        @error('location_id')<span class="err-msg">{{ $message }}</span>@enderror
                     </div>
 
-                    {{-- ── UPLOAD FOTO ── --}}
+                    {{-- ── UPLOAD GAMBAR ── --}}
                     <div class="field-group field-full">
-                        <label class="field-label">Foto</label>
+                        <label class="field-label">Gambar</label>
 
                         <div class="upload-zone" id="uploadZoneTambah"
                             onclick="document.getElementById('inputFotoTambah').click()"
@@ -264,17 +291,17 @@
                                             <line x1="18" y1="6" x2="6" y2="18" />
                                             <line x1="6" y1="6" x2="18" y2="18" />
                                         </svg>
-                                        Hapus foto
+                                        Hapus Gambar
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <input type="file" id="inputFotoTambah" name="foto"
+                        <input type="file" id="inputFotoTambah" name="gambar"
                             accept="image/jpeg,image/png,image/webp" style="display:none;"
                             onchange="onFileChange(this,'uploadZoneTambah','previewWrapTambah','previewImgTambah','previewNameTambah','placeholderTambah','errFotoTambah')" />
                         <span class="err-msg" id="errFotoTambah"></span>
-                        @error('foto')<span class="err-msg">{{ $message }}</span>@enderror
+                        @error('gambar')<span class="err-msg">{{ $message }}</span>@enderror
                     </div>
 
                 </div>
@@ -312,42 +339,56 @@
             <div class="modal-body">
                 <div class="modal-grid">
                     <div class="field-group field-full">
-                        <label class="field-label">Nama Lengkap <span class="req">*</span></label>
+                        <label class="field-label">No Registrasi <span class="req">*</span></label>
+                        <input type="text" class="field-input" name="no_registrasi" id="edit_no_registrasi" required />
+                        @error('no_registrasi')<span class="err-msg">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Nama Barang/Peralatan <span class="req">*</span></label>
                         <input type="text" class="field-input" name="name" id="edit_name" required />
                         @error('name')<span class="err-msg">{{ $message }}</span>@enderror
                     </div>
                     <div class="field-group">
-                        <label class="field-label">NIS <span class="req">*</span></label>
-                        <input type="number" class="field-input" name="identity_number" id="edit_identity_number" required />
-                        @error('nis')<span class="err-msg">{{ $message }}</span>@enderror
+                        <label class="field-label">Jumlah Stok <span class="req">*</span></label>
+                        <input type="number" class="field-input" name="stok" id="edit_stok" required />
+                        @error('stok')<span class="err-msg">{{ $message }}</span>@enderror
                     </div>
                     <div class="field-group">
-                        <label class="field-label">Kelas <span class="req">*</span></label>
-                        <select class="field-input" name="class_room_id" id="edit_class_room_id" required>
-                            <option value="">-- Pilih Kelas --</option>
-                            @foreach($classRooms as $kelas)
-                            <option value="{{ $kelas->id }}" {{ old('kelas_id') == $kelas->id ? 'selected' : '' }}>
-                                {{ $kelas->nama }}
+                        <label class="field-label">Batas Stok Aman <span class="req">*</span></label>
+                        <input type="number" class="field-input" name="batas_aman_stok" id="edit_batas_aman_stok" required />
+                        @error('batas_aman_stok')<span class="err-msg">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Satuan <span class="req">*</span></label>
+                        <input type="text" class="field-input" name="satuan" id="edit_satuan" required />
+                        @error('satuan')<span class="err-msg">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Merek <span class="req">*</span></label>
+                        <input type="text" class="field-input" name="merek" id="edit_merek" required />
+                        @error('merek')<span class="err-msg">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Vendor/Distributor <span class="req">*</span></label>
+                        <input type="text" class="field-input" name="vendor" id="edit_vendor" required />
+                        @error('vendor')<span class="err-msg">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Lokasi <span class="req">*</span></label>
+                        <select class="field-input" name="location_id" id="edit_location_id" required>
+                            <option value="">-- Pilih Lokasi --</option>
+                            @foreach($locations as $location)
+                            <option value="{{ $location->id }}" {{ old('kelas_id') == $location->id ? 'selected' : '' }}>
+                                {{ $location->name }}
                             </option>
                             @endforeach
                         </select>
                         @error('kelas_id')<span class="err-msg">{{ $message }}</span>@enderror
                     </div>
-                    <div class="field-group">
-                        <label class="field-label">Username <span class="req">*</span></label>
-                        <input type="text" class="field-input" name="username" id="edit_username" required />
-                        @error('username')<span class="err-msg">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="field-group">
-                        <label class="field-label">Password</label>
-                        <input type="password" class="field-input" name="password"
-                            placeholder="Kosongkan jika tidak ingin diubah" />
-                        @error('password')<span class="err-msg">{{ $message }}</span>@enderror
-                    </div>
 
                     {{-- ── UPLOAD FOTO ── --}}
                     <div class="field-group field-full">
-                        <label class="field-label">Foto</label>
+                        <label class="field-label">Gambar</label>
 
                         <div class="upload-zone" id="uploadZoneEdit"
                             onclick="document.getElementById('inputFotoEdit').click()"
@@ -381,7 +422,7 @@
                             </div>
                         </div>
 
-                        <input type="file" id="inputFotoEdit" name="foto"
+                        <input type="file" id="inputFotoEdit" name="gambar"
                             accept="image/jpeg,image/png,image/webp" style="display:none;"
                             onchange="onFileChange(this,'uploadZoneEdit','previewWrapEdit','previewImgEdit','previewNameEdit','placeholderEdit','errFotoEdit')" />
 
@@ -525,6 +566,108 @@
     }
 
     .btn-reset:hover {
+        filter: brightness(0.93);
+    }
+
+    /* Upload zone */
+    .upload-zone {
+        border: 2px dashed #cbd5e1;
+        border-radius: 10px;
+        padding: 20px 16px;
+        cursor: pointer;
+        transition: border-color 0.2s, background 0.2s;
+        background: #fafbff;
+        user-select: none;
+    }
+
+    .upload-zone:hover {
+        border-color: #2563eb;
+        background: #eff6ff;
+    }
+
+    .upload-zone.drag-over {
+        border-color: #2563eb;
+        background: #dbeafe;
+    }
+
+    .upload-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .upload-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        background: #e0e7ff;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 4px;
+    }
+
+    .upload-txt {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #374151;
+    }
+
+    .upload-hint {
+        font-size: 0.75rem;
+        color: #94a3b8;
+    }
+
+    .upload-preview {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .upload-preview img {
+        width: 72px;
+        height: 72px;
+        border-radius: 10px;
+        object-fit: cover;
+        border: 2px solid #e2e8f0;
+        flex-shrink: 0;
+    }
+
+    .upload-preview-info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+    }
+
+    .upload-fname {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #374151;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
+
+    .upload-remove {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: #fee2e2;
+        color: #991b1b;
+        border: none;
+        border-radius: 6px;
+        padding: 4px 10px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        font-family: var(--font);
+        cursor: pointer;
+    }
+
+    .upload-remove:hover {
         filter: brightness(0.93);
     }
 
@@ -987,17 +1130,23 @@
     }
 
     // Edit Modal
-    function openEdit(id, name, username, identity_number, class_room_id, foto) {
+    function openEdit(id, no_registrasi, name, stok, batas_aman_stok,
+        satuan, merek, vendor, gambar, location_id) {
 
+        document.getElementById('edit_no_registrasi').value = no_registrasi;
         document.getElementById('edit_name').value = name;
-        document.getElementById('edit_username').value = username;
-        document.getElementById('edit_identity_number').value = identity_number;
+        document.getElementById('edit_stok').value = stok;
+        document.getElementById('edit_satuan').value = satuan;
+        document.getElementById('edit_batas_aman_stok').value = batas_aman_stok;
+        document.getElementById('edit_satuan').value = satuan;
+        document.getElementById('edit_merek').value = merek;
+        document.getElementById('edit_vendor').value = vendor;
 
         // set kelas
-        document.getElementById('edit_class_room_id').value = class_room_id;
+        document.getElementById('edit_location_id').value = location_id;
 
         // set action form
-        document.getElementById('formEdit').action = `/master-siswa/${id}`;
+        document.getElementById('formEdit').action = `/barang-kondisi-baik/${id}`;
 
         // handle preview foto (pakai sistem upload kamu)
         let previewWrap = document.getElementById('previewWrapEdit');
@@ -1005,9 +1154,9 @@
         let previewName = document.getElementById('previewNameEdit');
         let placeholder = document.getElementById('placeholderEdit');
 
-        if (foto) {
-            previewImg.src = `/${foto}`;
-            previewName.innerText = 'Foto saat ini';
+        if (gambar) {
+            previewImg.src = `/${gambar}`;
+            previewName.innerText = 'Gambar saat ini';
             previewWrap.style.display = 'flex';
             placeholder.style.display = 'none';
         } else {
@@ -1090,7 +1239,7 @@
     /* Hapus */
     function openHapus(id, nama) {
         document.getElementById('hapusNama').textContent = nama;
-        document.getElementById('formHapus').action = `/master-siswa/${id}`;
+        document.getElementById('formHapus').action = `/barang-kondisi-baik/${id}`;
         openModal('modalHapus');
     }
 
@@ -1098,7 +1247,7 @@
     function openDetail(id) {
         openModal('modalDetail');
         document.getElementById('detailContent').innerHTML = '<div style="text-align:center;padding:32px;color:#94a3b8;font-size:0.85rem;">Memuat...</div>';
-        fetch(`/master-siswa/${id}/detail`, {
+        fetch(`/barang-kondisi-baik/${id}/detail`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }

@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Location extends Model
+class GoodItem extends Model
 {
     protected $guarded = [];
 
-    public function goodItem()
+    public function location()
     {
-        return $this->hasMany(GoodItem::class);
+        return $this->belongsTo(Location::class);
     }
 }

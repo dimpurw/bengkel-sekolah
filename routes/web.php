@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClassRoomController;
+use App\Http\Controllers\GoodItemController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StafController;
@@ -42,3 +43,9 @@ Route::post('lokasi-penyimpanan', [LocationController::class, 'store'])->name('l
 Route::put('lokasi-penyimpanan/{id}', [LocationController::class, 'update'])->name('location.update');
 Route::delete('lokasi-penyimpanan/{id}', [LocationController::class, 'destroy'])->name('location.destroy');
 Route::post('lokasi-penyimpanan/import-class', [LocationController::class, 'import'])->name('location.import');
+
+Route::get('barang-kondisi-baik', [GoodItemController::class, 'index'])->name('good.item.index');
+Route::post('barang-kondisi-baik', [GoodItemController::class, 'store'])->name('good.item.store');
+Route::put('barang-kondisi-baik/{id}', [GoodItemController::class, 'update'])->name('good.item.update');
+Route::delete('barang-kondisi-baik/{id}', [GoodItemController::class, 'destroy'])->name('good.item.destroy');
+Route::post('barang-kondisi-baik/import-class', [GoodItemController::class, 'import'])->name('good.item.import');
