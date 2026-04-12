@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Barang (Kondisi Baik)')
+@section('title', 'Barang Rusak/Arsip')
 
 @section('content')
 
@@ -13,7 +13,7 @@
         {{-- Baris atas: judul + tombol aksi --}}
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
             <span style="font-size:0.92rem;font-weight:800;color:#0f172a;">
-                Data Barang/Peralatan (Kondisi Baik)
+                Data Barang Rusak/Arsip
             </span>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
                 <a href="#" target="_blank" class="btn-top btn-cetak">
@@ -43,7 +43,7 @@
         </div>
 
         {{-- Baris filter --}}
-        <form method="GET" action="{{ route('good.item.index') }}" id="filterForm">
+        <form method="GET" action="{{ route('damaged.item.index') }}" id="filterForm">
             <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
 
                 {{-- Search --}}
@@ -64,7 +64,7 @@
                 {{-- Filter Lokasi --}}
                 <div style="min-width:160px;">
                     <select name="location_id" class="field-input" onchange="this.form.submit()">
-                        <option value="">Semua lokasi</option>
+                        <option value="">Semua Lokasi</option>
                         @foreach($locations as $location)
                         <option value="{{ $location->id }}" {{ request('location_id') == $location->id ? 'selected' : '' }}>
                             {{ $location->name }}
@@ -86,7 +86,7 @@
 
                 {{-- Reset --}}
                 @if(request()->hasAny(['search','location_id']) && request()->anyFilled(['search','location_id']))
-                <a href="{{ route('good.item.index') }}" class="btn-reset">
+                <a href="{{ route('damaged.item.index') }}" class="btn-reset">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <line x1="18" y1="6" x2="6" y2="18" />
                         <line x1="6" y1="6" x2="18" y2="18" />
@@ -107,7 +107,7 @@
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
             </svg>
-            <p style="font-size:0.88rem;font-weight:600;">Tidak ada data barang (Kondisi Baik) ditemukan.</p>
+            <p style="font-size:0.88rem;font-weight:600;">Tidak ada data barang Rusak/Arsip ditemukan.</p>
         </div>
         @else
         <div class="siswa-grid">
@@ -156,7 +156,6 @@
                             '{{ $item->no_registrasi }}',
                             '{{ $item->name }}',
                             '{{ $item->stok }}',
-                            '{{ $item->batas_aman_stok }}',
                             '{{ $item->satuan }}',
                             '{{ $item->merek }}',
                             '{{ $item->vendor }}',
@@ -190,7 +189,7 @@
 <div class="modal-overlay" id="modalTambah">
     <div class="modal-box">
         <div class="modal-head">
-            <span>Tambah Barang (Kondisi Baik)</span>
+            <span>Tambah Barang Rusak/Arsip</span>
             <button class="modal-close" onclick="closeModal('modalTambah')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="18" y1="6" x2="6" y2="18" />
@@ -198,7 +197,7 @@
                 </svg>
             </button>
         </div>
-        <form method="POST" action="{{ route('good.item.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('damaged.item.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
                 <div class="modal-grid">
@@ -219,12 +218,6 @@
                         <input type="number" class="field-input" name="stok"
                             value="{{ old('stok') }}" placeholder="Jumlah Stok" required />
                         @error('stok')<span class="err-msg">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="field-group">
-                        <label class="field-label">Batas Stok Aman <span class="req">*</span></label>
-                        <input type="number" class="field-input" name="batas_aman_stok"
-                            value="{{ old('batas_aman_stok') }}" placeholder="Batas Stok Aman" required />
-                        @error('batas_aman_stok')<span class="err-msg">{{ $message }}</span>@enderror
                     </div>
                     <div class="field-group">
                         <label class="field-label">Satuan <span class="req">*</span></label>
@@ -354,11 +347,6 @@
                         @error('stok')<span class="err-msg">{{ $message }}</span>@enderror
                     </div>
                     <div class="field-group">
-                        <label class="field-label">Batas Stok Aman <span class="req">*</span></label>
-                        <input type="number" class="field-input" name="batas_aman_stok" id="edit_batas_aman_stok" required />
-                        @error('batas_aman_stok')<span class="err-msg">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="field-group">
                         <label class="field-label">Satuan <span class="req">*</span></label>
                         <input type="text" class="field-input" name="satuan" id="edit_satuan" required />
                         @error('satuan')<span class="err-msg">{{ $message }}</span>@enderror
@@ -472,7 +460,7 @@
 <div class="modal-overlay" id="modalHapus">
     <div class="modal-box modal-box-sm">
         <div class="modal-head">
-            <span>Hapus Barang Kondisi Baik</span>
+            <span>Hapus Barang Kondisi Rusak/Arsip</span>
             <button class="modal-close" onclick="closeModal('modalHapus')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="18" y1="6" x2="6" y2="18" />
@@ -1130,14 +1118,13 @@
     }
 
     // Edit Modal
-    function openEdit(id, no_registrasi, name, stok, batas_aman_stok,
+    function openEdit(id, no_registrasi, name, stok,
         satuan, merek, vendor, gambar, location_id) {
 
         document.getElementById('edit_no_registrasi').value = no_registrasi;
         document.getElementById('edit_name').value = name;
         document.getElementById('edit_stok').value = stok;
         document.getElementById('edit_satuan').value = satuan;
-        document.getElementById('edit_batas_aman_stok').value = batas_aman_stok;
         document.getElementById('edit_merek').value = merek;
         document.getElementById('edit_vendor').value = vendor;
 
@@ -1145,7 +1132,7 @@
         document.getElementById('edit_location_id').value = location_id;
 
         // set action form
-        document.getElementById('formEdit').action = `/barang-kondisi-baik/${id}`;
+        document.getElementById('formEdit').action = `/barang-kondisi-rusak/${id}`;
 
         // handle preview foto (pakai sistem upload kamu)
         let previewWrap = document.getElementById('previewWrapEdit');
@@ -1238,7 +1225,7 @@
     /* Hapus */
     function openHapus(id, nama) {
         document.getElementById('hapusNama').textContent = nama;
-        document.getElementById('formHapus').action = `/barang-kondisi-baik/${id}`;
+        document.getElementById('formHapus').action = `/barang-kondisi-rusak/${id}`;
         openModal('modalHapus');
     }
 
@@ -1246,7 +1233,7 @@
     function openDetail(id) {
         openModal('modalDetail');
         document.getElementById('detailContent').innerHTML = '<div style="text-align:center;padding:32px;color:#94a3b8;font-size:0.85rem;">Memuat...</div>';
-        fetch(`/barang-kondisi-baik/${id}/detail`, {
+        fetch(`/barang-kondisi-rusak/${id}/detail`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }

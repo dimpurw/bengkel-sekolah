@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClassRoomController;
+use App\Http\Controllers\DamagedItemController;
 use App\Http\Controllers\GoodItemController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SchoolController;
@@ -49,3 +50,9 @@ Route::post('barang-kondisi-baik', [GoodItemController::class, 'store'])->name('
 Route::put('barang-kondisi-baik/{id}', [GoodItemController::class, 'update'])->name('good.item.update');
 Route::delete('barang-kondisi-baik/{id}', [GoodItemController::class, 'destroy'])->name('good.item.destroy');
 Route::post('barang-kondisi-baik/import-class', [GoodItemController::class, 'import'])->name('good.item.import');
+
+Route::get('barang-kondisi-rusak', [DamagedItemController::class, 'index'])->name('damaged.item.index');
+Route::post('barang-kondisi-rusak', [DamagedItemController::class, 'store'])->name('damaged.item.store');
+Route::put('barang-kondisi-rusak/{id}', [DamagedItemController::class, 'update'])->name('damaged.item.update');
+Route::delete('barang-kondisi-rusak/{id}', [DamagedItemController::class, 'destroy'])->name('damaged.item.destroy');
+Route::post('barang-kondisi-rusak/import-class', [DamagedItemController::class, 'import'])->name('damaged.item.import');

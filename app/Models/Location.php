@@ -12,4 +12,9 @@ class Location extends Model
     {
         return $this->hasMany(GoodItem::class);
     }
+
+    public function damagedItem()
+    {
+        return $this->hasMany(DamagedItem::class);
+    }
 }
