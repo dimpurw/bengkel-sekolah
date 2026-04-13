@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ClassRoomController;
 use App\Http\Controllers\DamagedItemController;
 use App\Http\Controllers\GoodItemController;
+use App\Http\Controllers\ItemRequestController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StafController;
@@ -73,3 +74,10 @@ Route::post('bahan-habis-pakai', [StockOutController::class, 'store'])->name('st
 Route::put('bahan-habis-pakai/{id}', [StockOutController::class, 'update'])->name('stock.out.update');
 Route::delete('bahan-habis-pakai/{id}', [StockOutController::class, 'destroy'])->name('stock.out.destroy');
 Route::post('bahan-habis-pakai/import-class', [StockOutController::class, 'import'])->name('stock.out.import');
+
+Route::get('/ajukan-peminjaman', [ItemRequestController::class, 'index'])->name('peminjaman.index');
+Route::post('/peminjaman/keranjang', [ItemRequestController::class, 'tambahKeranjang'])->name('peminjaman.keranjang.tambah');
+Route::delete('/peminjaman/keranjang/{barangId}', [ItemRequestController::class, 'hapusKeranjang'])->name('peminjaman.keranjang.hapus');
+Route::post('/peminjaman/ajukan', [ItemRequestController::class, 'ajukan'])->name('peminjaman.ajukan');
+Route::put('/peminjaman/{id}',    [ItemRequestController::class, 'update'])->name('peminjaman.update');
+Route::delete('/peminjaman/{id}', [ItemRequestController::class, 'destroy'])->name('peminjaman.destroy');
