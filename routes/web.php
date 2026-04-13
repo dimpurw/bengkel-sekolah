@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ClassRoomController;
 use App\Http\Controllers\DamagedItemController;
 use App\Http\Controllers\GoodItemController;
@@ -16,6 +17,15 @@ Route::get('/', function () {
 
 Route::get('dashboard', function () {
     return view('dashboard');
+});
+
+Route::middleware(['guest'])->group(function () {
+    Route::get('/', [AuthenticationController::class, 'login'])->name('login');
+    Route::post('/', [AuthenticationController::class, 'loginStore'])->name('login.store');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout');
 });
 
 Route::get('identitas-sekolah', [SchoolController::class, 'index'])->name('school.index');

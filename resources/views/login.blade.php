@@ -399,42 +399,46 @@
         <p class="subtitle">Silakan login untuk melanjutkan</p>
 
         <!-- Form -->
-        <div class="mb-3">
-            <label class="form-label">Username</label>
-            <div class="input-icon-wrap">
-                <span class="icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg>
-                </span>
-                <input type="text" class="form-control" id="username" placeholder="Masukkan username" autocomplete="username" />
-            </div>
-        </div>
+        <form action="{{ route('login.store') }}" method="post">
+            @csrf
 
-        <div class="mb-4">
-            <label class="form-label">Password</label>
-            <div class="input-icon-wrap">
-                <span class="icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                </span>
-                <input type="password" class="form-control" id="password" placeholder="Masukkan password" autocomplete="current-password" />
-                <button class="toggle-pass" id="togglePass" type="button" aria-label="Tampilkan password">
-                    <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                        <circle cx="12" cy="12" r="3" />
-                    </svg>
-                </button>
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <div class="input-icon-wrap">
+                    <span class="icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </span>
+                    <input type="text" name="username" class="form-control" id="username" required placeholder="Masukkan username" autocomplete="username" />
+                </div>
             </div>
-        </div>
 
-        <button class="btn-masuk" id="btnMasuk" type="button">
-            <span class="spinner"></span>
-            <span class="btn-text">Masuk</span>
-        </button>
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <div class="input-icon-wrap">
+                    <span class="icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                    </span>
+                    <input type="password" name="password" class="form-control" id="password" required placeholder="Masukkan password" autocomplete="current-password" />
+                    <button class="toggle-pass" id="togglePass" type="button" aria-label="Tampilkan password">
+                        <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <button class="btn-masuk" id="btnMasuk" type="submit">
+                <span class="spinner"></span>
+                <span class="btn-text">Masuk</span>
+            </button>
+        </form>
 
         <!-- Default credentials -->
         <div class="cred-box">
@@ -455,9 +459,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const btnMasuk = document.getElementById('btnMasuk');
-        const usernameEl = document.getElementById('username');
-        const passwordEl = document.getElementById('password');
         const togglePass = document.getElementById('togglePass');
         const eyeIcon = document.getElementById('eyeIcon');
         const toastEl = document.getElementById('toastError');
@@ -473,59 +474,43 @@
             passwordEl.type = passVisible ? 'text' : 'password';
             eyeIcon.innerHTML = passVisible ? eyeClose : eyeOpen;
         });
+    </script>
+    @if($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
-        // Show toast
-        function showToast(msg) {
-            toastMsg.textContent = msg;
-            toastEl.classList.add('show');
-            setTimeout(() => toastEl.classList.remove('show'), 3000);
-        }
+            const toastEl = document.getElementById('toastError');
+            const toastMsg = document.getElementById('toastMsg');
 
-        // Login logic
-        btnMasuk.addEventListener('click', () => {
-            const user = usernameEl.value.trim();
-            const pass = passwordEl.value.trim();
-
-            if (!user || !pass) {
-                showToast('Mohon isi username dan password!');
-                return;
+            function showToast(msg) {
+                toastMsg.textContent = msg;
+                toastEl.classList.add('show');
+                setTimeout(() => toastEl.classList.remove('show'), 3000);
             }
 
-            btnMasuk.classList.add('loading');
-            btnMasuk.disabled = true;
+            showToast(@json($errors->first()));
 
-            setTimeout(() => {
-                btnMasuk.classList.remove('loading');
-                btnMasuk.disabled = false;
-
-                if (user === 'admin' && pass === 'admin123') {
-                    // Simulate success
-                    btnMasuk.style.background = 'linear-gradient(135deg, #16a34a, #15803d)';
-                    btnMasuk.querySelector('.btn-text').textContent = 'Berhasil Masuk ✓';
-                    setTimeout(() => {
-                        alert('Login berhasil! Selamat datang, ' + user + '.');
-                        btnMasuk.style.background = '';
-                        btnMasuk.querySelector('.btn-text').textContent = 'Masuk';
-                    }, 1000);
-                } else {
-                    showToast('Username atau password salah!');
-                    usernameEl.style.borderColor = '#fca5a5';
-                    passwordEl.style.borderColor = '#fca5a5';
-                    setTimeout(() => {
-                        usernameEl.style.borderColor = '';
-                        passwordEl.style.borderColor = '';
-                    }, 1800);
-                }
-            }, 1200);
-        });
-
-        // Enter key submit
-        [usernameEl, passwordEl].forEach(el => {
-            el.addEventListener('keydown', e => {
-                if (e.key === 'Enter') btnMasuk.click();
-            });
         });
     </script>
+    @endif
+    @if(session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const toastEl = document.getElementById('toastError');
+            const toastMsg = document.getElementById('toastMsg');
+
+            function showToast(msg) {
+                toastMsg.textContent = msg;
+                toastEl.classList.add('show');
+                setTimeout(() => toastEl.classList.remove('show'), 3000);
+            }
+
+            showToast(@json(session('error')));
+
+        });
+    </script>
+    @endif
 </body>
 
 </html>
