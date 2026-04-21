@@ -43,7 +43,7 @@
         </div>
 
         {{-- Baris filter --}}
-        <form method="GET" action="{{ route('good.item.index') }}" id="filterForm">
+        <form method="GET" action="{{ route('stock.out.index') }}" id="filterForm">
             <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
 
                 {{-- Search --}}
@@ -86,7 +86,7 @@
 
                 {{-- Reset --}}
                 @if(request()->hasAny(['search','location_id']) && request()->anyFilled(['search','location_id']))
-                <a href="{{ route('good.item.index') }}" class="btn-reset">
+                <a href="{{ route('stock.out.index') }}" class="btn-reset">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <line x1="18" y1="6" x2="6" y2="18" />
                         <line x1="6" y1="6" x2="18" y2="18" />
@@ -198,7 +198,7 @@
                 </svg>
             </button>
         </div>
-        <form method="POST" action="{{ route('good.item.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('stock.out.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
                 <div class="modal-grid">
@@ -325,7 +325,7 @@
 <div class="modal-overlay" id="modalEdit">
     <div class="modal-box">
         <div class="modal-head">
-            <span>Edit Siswa</span>
+            <span>Edit Bahan Habis Pakai</span>
             <button class="modal-close" onclick="closeModal('modalEdit')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="18" y1="6" x2="6" y2="18" />
@@ -450,7 +450,7 @@
 <div class="modal-overlay" id="modalDetail">
     <div class="modal-box">
         <div class="modal-head">
-            <span>Detail Siswa</span>
+            <span>Detail Bahan Habis Pakai</span>
             <button class="modal-close" onclick="closeModal('modalDetail')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="18" y1="6" x2="6" y2="18" />
@@ -1145,7 +1145,7 @@
         document.getElementById('edit_location_id').value = location_id;
 
         // set action form
-        document.getElementById('formEdit').action = `/barang-kondisi-baik/${id}`;
+        document.getElementById('formEdit').action = `/bahan-habis-pakai/${id}`;
 
         // handle preview foto (pakai sistem upload kamu)
         let previewWrap = document.getElementById('previewWrapEdit');
@@ -1238,7 +1238,7 @@
     /* Hapus */
     function openHapus(id, nama) {
         document.getElementById('hapusNama').textContent = nama;
-        document.getElementById('formHapus').action = `/barang-kondisi-baik/${id}`;
+        document.getElementById('formHapus').action = `/bahan-habis-pakai/${id}`;
         openModal('modalHapus');
     }
 
@@ -1246,7 +1246,7 @@
     function openDetail(id) {
         openModal('modalDetail');
         document.getElementById('detailContent').innerHTML = '<div style="text-align:center;padding:32px;color:#94a3b8;font-size:0.85rem;">Memuat...</div>';
-        fetch(`/barang-kondisi-baik/${id}/detail`, {
+        fetch(`/bahan-habis-pakai/${id}/detail`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\DamagedItemController;
 use App\Http\Controllers\GoodItemController;
 use App\Http\Controllers\ItemRequestController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\MaterialRequestController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StafController;
 use App\Http\Controllers\StockOutController;
@@ -81,3 +82,10 @@ Route::delete('/peminjaman/keranjang/{barangId}', [ItemRequestController::class,
 Route::post('/peminjaman/ajukan', [ItemRequestController::class, 'ajukan'])->name('peminjaman.ajukan');
 Route::put('/peminjaman/{id}',    [ItemRequestController::class, 'update'])->name('peminjaman.update');
 Route::delete('/peminjaman/{id}', [ItemRequestController::class, 'destroy'])->name('peminjaman.destroy');
+
+Route::get('/ajukan-peminjaman-bahan-praktik', [MaterialRequestController::class, 'index'])->name('peminjaman.praktik.index');
+Route::post('/peminjaman-bahan-praktik/keranjang', [MaterialRequestController::class, 'tambahKeranjang'])->name('peminjaman.praktik.keranjang.tambah');
+Route::delete('/peminjaman-bahan-praktik/keranjang/{barangId}', [MaterialRequestController::class, 'hapusKeranjang'])->name('peminjaman.praktik.keranjang.hapus');
+Route::post('/peminjaman-bahan-praktik/ajukan', [MaterialRequestController::class, 'ajukan'])->name('peminjaman.praktik.ajukan');
+Route::put('/peminjaman-bahan-praktik/{id}',    [MaterialRequestController::class, 'update'])->name('peminjaman.praktik.update');
+Route::delete('/peminjaman-bahan-praktik/{id}', [MaterialRequestController::class, 'destroy'])->name('peminjaman.praktik.destroy');

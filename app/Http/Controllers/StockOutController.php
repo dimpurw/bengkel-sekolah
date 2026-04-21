@@ -52,7 +52,7 @@ class StockOutController extends Controller
             'location_id' => $request->location_id,
         ]);
 
-        return redirect()->route('good.item.index')
+        return redirect()->route('stock.out.index')
             ->with('success', 'Data Barang (Kondisi Baik) berhasil dibuat');
     }
 
@@ -99,7 +99,7 @@ class StockOutController extends Controller
 
         $goodItem->update($data);
 
-        return redirect()->route('good.item.index')
+        return redirect()->route('stock.out.index')
             ->with('success', 'Data Barang (Kondisi Baik) berhasil diupdate');
     }
 
@@ -113,7 +113,7 @@ class StockOutController extends Controller
 
         $goodItem->delete();
 
-        return redirect()->route('good.item.index')
+        return redirect()->route('stock.out.index')
             ->with('success', 'Data Barang (Kondisi Baik) berhasil dihapus');
     }
 }
