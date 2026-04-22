@@ -133,4 +133,14 @@ class ItemRequestController extends Controller
 
         return back()->with('success', 'Pengajuan berhasil dibatalkan.');
     }
+
+    public function approval()
+    {
+        $pengajuans = ItemRequest::with(['goodItem.location', 'user.classRoom'])
+            ->where('status', 'menunggu')
+            ->latest()
+            ->get();
+
+        return view('item_request_approval', compact('pengajuans'));
+    }
 }

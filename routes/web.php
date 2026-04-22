@@ -82,6 +82,7 @@ Route::delete('/peminjaman/keranjang/{barangId}', [ItemRequestController::class,
 Route::post('/peminjaman/ajukan', [ItemRequestController::class, 'ajukan'])->name('peminjaman.ajukan');
 Route::put('/peminjaman/{id}',    [ItemRequestController::class, 'update'])->name('peminjaman.update');
 Route::delete('/peminjaman/{id}', [ItemRequestController::class, 'destroy'])->name('peminjaman.destroy');
+Route::get('/ajukan-peminjaman/approval', [ItemRequestController::class, 'approval'])->name('peminjaman.approval');
 
 Route::get('/ajukan-peminjaman-bahan-praktik', [MaterialRequestController::class, 'index'])->name('peminjaman.praktik.index');
 Route::post('/peminjaman-bahan-praktik/keranjang', [MaterialRequestController::class, 'tambahKeranjang'])->name('peminjaman.praktik.keranjang.tambah');

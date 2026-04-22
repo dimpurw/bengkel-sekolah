@@ -12,4 +12,9 @@ class ItemRequest extends Model
     {
         return $this->belongsTo(GoodItem::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
